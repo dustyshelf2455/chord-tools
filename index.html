@@ -124,7 +124,7 @@ svg.kb{width:100%;height:auto;display:block}
 
   <div class="rail" id="rail"></div>
   <div class="dots" id="dots"></div>
-  <p class="hint" id="hint">Swipe for the next voicing. Guitar shapes are ranked easiest first; piano voicings start plain and get more pianistic.</p>
+  <p class="hint" id="hint">Swipe for the next voicing. Guitar shapes are ranked easiest first; piano voicings start plain and get more pianistic. The keyboard is drawn as a 37-key C-to-C board (Reface CP).</p>
 </div>
 
 <script>
@@ -274,8 +274,9 @@ function guitarShapes(root,q){
 // ---------- Piano ----------
 function pianoVoicings(root,q){
   const has7=q.iv.some(i=>i===10||i===11);
-  const low=root>=6?-12:0;
-  const LH=48+root+low, RH=60+root+low;
+  const LH=48+root;
+  const top=Math.max(...q.iv);
+  const RH=(60+root+top>84)?48+root:60+root;
   const closed=q.iv.map(i=>i>=12?i-12:i).filter((v,i,a)=>a.indexOf(v)===i).sort((a,b)=>a-b);
   const inv=(arr,n)=>{const a=arr.slice();for(let i=0;i<n;i++)a.push(a.shift()+12);return a};
   const V=[];
@@ -297,9 +298,11 @@ function pianoVoicings(root,q){
     V.push({label:'Spread',desc:'Root and 5th in the left hand, 3rd and 7th (plus 9th) spread in the right. Wide and orchestral; good for ballads and slow blues.',lh:[LH,LH+7],rh:[RH+third,RH+sev,RH+12+(q.iv.includes(14)?2:0)].filter((v,i,a)=>a.indexOf(v)===i)});
   } else if(closed.length===3){
     V.push({label:'Open (10ths)',desc:'Root and 5th in the left hand, 3rd an octave higher in the right. The widest, most "piano" sounding triad.',lh:[LH,LH+closed[2]],rh:[RH+closed[1]+12,RH+12+ (closed[2]===7?7:closed[2])]});
-    V.push({label:'Left-hand root, right-hand triad',desc:'Octave root low, triad in the middle of the keyboard. Good for comping under a guitar.',lh:[LH-12,LH],rh:inv(closed,1).map(i=>RH+i)});
+    V.push({label:'Left-hand root, right-hand triad',desc:'Root low, first-inversion triad in the middle of the keyboard. Good for comping under a guitar.',lh:[LH],rh:inv(closed,1).map(i=>RH+i+(RH===LH?12:0))});
   }
-  return V;
+  // Fit every voicing onto a 37-key C-to-C board (48..84): drop the right hand an octave while it is too high, then discard anything that still does not fit.
+  return V.map(v=>{let rh=v.rh.slice();while(Math.max(...rh)>84&&Math.min(...rh)-12>Math.max(...v.lh))rh=rh.map(n=>n-12);return {...v,rh}})
+          .filter(v=>Math.min(...v.lh,...v.rh)>=48&&Math.max(...v.lh,...v.rh)<=84);
 }
 
 
@@ -355,21 +358,18 @@ function pianoVoicings(root,q){
 
   function piano(notes,rootPc){
     const isB=m=>[1,3,6,8,10].includes(m%12);
-    const mn=Math.min(...notes), mx=Math.max(...notes);
-    let lo=mn-2; while(lo%12!==0&&lo%12!==5)lo--; let hi=mx+2; while(hi%12!==11&&hi%12!==4)hi++;
-    while(hi-lo<23)hi++;
-    const W=24,H=96,set=new Map(notes.map(n=>[n,mod(n-rootPc)]));
+    const lo=48, hi=84; // Reface CP: 37 keys, C to C
+    const W=24,H=112,set=new Map(notes.map(n=>[n,mod(n-rootPc)]));
     const whites=[];for(let m=lo;m<=hi;m++)if(!isB(m))whites.push(m);
     const wx=m=>whites.indexOf(m)*W;
-    let o=`<svg class="kb" viewBox="0 0 ${whites.length*W} ${H+34}" xmlns="http://www.w3.org/2000/svg" role="img">`;
+    let o=`<svg class="kb" viewBox="0 0 ${whites.length*W} ${H+24}" xmlns="http://www.w3.org/2000/svg" role="img">`;
     whites.forEach(m=>{const iv=set.get(m),on=iv!==undefined;
       o+=`<rect x="${wx(m)}" y="0" width="${W}" height="${H}" rx="3" fill="${on?col(roleOf(iv)):'var(--key-white)'}" stroke="var(--key-line)"/>`;
-      if(on)o+=`<text x="${wx(m)+W/2}" y="${H-9}" font-family="var(--mono)" font-size="10" fill="var(--dot-ink)" text-anchor="middle" font-weight="700">${IVNAME[iv]||IVNAME[iv+12]||''}</text><text x="${wx(m)+W/2}" y="${H+15}" font-family="var(--mono)" font-size="11" fill="var(--fg)" text-anchor="middle">${noteName(m%12)}</text>`;
-      if(m%12===0)o+=`<text x="${wx(m)+W/2}" y="${H+29}" font-family="var(--mono)" font-size="9" fill="var(--muted)" text-anchor="middle">C${Math.floor(m/12)-1}</text>`;
+      if(on)o+=`<text x="${wx(m)+W/2}" y="${H-10}" font-family="var(--mono)" font-size="13" fill="var(--dot-ink)" text-anchor="middle" font-weight="700">${IVNAME[iv]||IVNAME[iv+12]||''}</text><text x="${wx(m)+W/2}" y="${H+17}" font-family="var(--mono)" font-size="13" fill="var(--fg)" text-anchor="middle">${noteName(m%12)}</text>`;
     });
     for(let m=lo;m<=hi;m++){if(!isB(m))continue;const x=wx(m-1)+W-8,iv=set.get(m),on=iv!==undefined;
-      o+=`<rect x="${x}" y="0" width="16" height="60" rx="3" fill="${on?col(roleOf(iv)):'var(--key-black)'}" stroke="var(--key-line)"/>`;
-      if(on)o+=`<text x="${x+8}" y="52" font-family="var(--mono)" font-size="9" fill="var(--dot-ink)" text-anchor="middle" font-weight="700">${IVNAME[iv]||IVNAME[iv+12]||''}</text><text x="${x+8}" y="${H+15}" font-family="var(--mono)" font-size="11" fill="var(--fg)" text-anchor="middle">${noteName(m%12)}</text>`;
+      o+=`<rect x="${x}" y="0" width="16" height="68" rx="3" fill="${on?col(roleOf(iv)):'var(--key-black)'}" stroke="var(--key-line)"/>`;
+      if(on)o+=`<text x="${x+8}" y="58" font-family="var(--mono)" font-size="11" fill="var(--dot-ink)" text-anchor="middle" font-weight="700">${IVNAME[iv]||IVNAME[iv+12]||''}</text><text x="${x+8}" y="${H+17}" font-family="var(--mono)" font-size="13" fill="var(--fg)" text-anchor="middle">${noteName(m%12)}</text>`;
     }
     return o+'</svg>';
   }
