@@ -16,7 +16,7 @@
 <style>
 /* Layout: a one-screen tool. Pickers on top, chord name, instrument switch, then a swipeable rail of voicings. Dark by choice. */
 :root{
-  --bg:#15181c; --panel:#1d2126; --panel-2:#242931; --fg:#ecebe6; --muted:#a3a9b3; --line:#343a43;
+  --bg:#15181c; --panel:#1d2126; --panel-2:#242931; --fg:#ecebe6; --muted:#c9ced6; --line:#343a43;
   --accent:#6fc2ad; --accent-ink:#0f1a17;
   --root:#f2c14e; --guide:#ef6b4a; --color:#5fc0d6; --dot-ink:#15181c;
   --key-white:#e9e7e0; --key-black:#111317; --key-line:#4a4f58; --fret:#5c6370; --string:#aeb4bd;
@@ -27,60 +27,60 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.4;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.45;margin:0;-webkit-tap-highlight-color:transparent}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .wrap{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px;display:grid;gap:16px}
-h1{font-family:var(--display);font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
+h1{font-family:var(--display);font-size:24px;font-weight:700;margin:0;letter-spacing:-.01em}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend{display:flex;gap:12px;font-size:14px;color:var(--muted);flex-wrap:wrap}
 .legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;background:var(--c);vertical-align:-1px}
-.lab{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
+.lab{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px}
 .roots{display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
 @media (max-width:480px){.roots{grid-template-columns:repeat(6,1fr)}}
-.roots button{font-family:var(--display);font-size:17px;font-weight:700;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 0 6px;cursor:pointer;line-height:1.05;min-height:48px;display:grid;place-items:center}
-.roots button small{display:block;font:500 11px var(--mono);color:var(--muted);margin-top:2px}
+.roots button{font-family:var(--display);font-size:19px;font-weight:700;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 0 6px;cursor:pointer;line-height:1.05;min-height:52px;display:grid;place-items:center}
+.roots button small{display:block;font:500 12px var(--mono);color:var(--muted);margin-top:2px}
 .roots button[aria-pressed="true"]{background:var(--root);color:var(--dot-ink);border-color:var(--root)}
 .roots button[aria-pressed="true"] small{color:var(--dot-ink);opacity:.75}
 .quals{display:grid;gap:8px}
 .qgroup{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.qgroup .glab{font:500 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:100%}
-.quals button{font:600 14px var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;cursor:pointer;min-height:36px}
+.qgroup .glab{font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);width:100%}
+.quals button{font:600 16px var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:pointer;min-height:40px}
 .quals button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .chord{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;border-top:1px solid var(--line);padding-top:14px}
 .chord .name{font-family:var(--display);font-size:clamp(40px,10vw,56px);font-weight:700;letter-spacing:-.02em;line-height:1}
 .chord .name sup{font-size:.5em;vertical-align:.6em;letter-spacing:0}
-.chord .notes{font-family:var(--mono);font-size:15px;color:var(--fg)}
+.chord .notes{font-family:var(--mono);font-size:18px;color:var(--fg)}
 .chord .notes b{color:var(--root);font-weight:500}
-.chord .formula{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.06em;width:100%}
+.chord .formula{font-family:var(--mono);font-size:14px;color:var(--muted);letter-spacing:.06em;width:100%}
 .bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px}
-.seg button{font:600 15px var(--body);color:var(--fg);background:transparent;border:0;border-radius:999px;padding:8px 18px;cursor:pointer}
+.seg button{font:600 17px var(--body);color:var(--fg);background:transparent;border:0;border-radius:999px;padding:8px 18px;cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .nav{display:flex;align-items:center;gap:6px}
 .nav button{font:600 18px var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:999px;width:38px;height:38px;cursor:pointer}
-.nav .count{font-family:var(--mono);font-size:13px;color:var(--muted);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
+.nav .count{font-family:var(--mono);font-size:15px;color:var(--muted);min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
 .rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:4px;margin-inline:-4px;padding-inline:4px}
 .rail::-webkit-scrollbar{display:none}
 .card{flex:0 0 100%;scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:12px;min-width:0}
 .card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
-.card-head h2{font-family:var(--display);font-size:20px;font-weight:700;margin:0}
-.card-head .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.card p{margin:0;color:var(--muted);font-size:14px;max-width:60ch}
+.card-head h2{font-family:var(--display);font-size:22px;font-weight:700;margin:0}
+.card-head .meta{font-family:var(--mono);font-size:14px;color:var(--muted)}
+.card p{margin:0;color:var(--fg);font-size:16px;max-width:60ch}
 .gcard{display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr);gap:16px;align-items:start}
 @media (max-width:420px){.gcard{grid-template-columns:minmax(0,150px) minmax(0,1fr)}}
 svg.fb{width:100%;height:auto;display:block}
 svg.kb{width:100%;height:auto;display:block}
-.facts{display:grid;gap:8px;font-size:14px}
+.facts{display:grid;gap:10px;font-size:16px}
 .facts div{display:grid;gap:1px}
-.facts b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.facts span{font-family:var(--mono);font-size:13px}
-.hear{font:600 14px var(--body);color:var(--accent-ink);background:var(--accent);border:0;border-radius:999px;padding:9px 16px;cursor:pointer;width:max-content;display:inline-flex;gap:6px;align-items:center}
+.facts b{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.facts span{font-family:var(--mono);font-size:16px}
+.hear{font:600 16px var(--body);color:var(--accent-ink);background:var(--accent);border:0;border-radius:999px;padding:9px 16px;cursor:pointer;width:max-content;display:inline-flex;gap:6px;align-items:center}
 .hear:active{transform:scale(.98)}
 .dots{display:flex;gap:5px;justify-content:center}
 .dots i{width:6px;height:6px;border-radius:50%;background:var(--line)}
 .dots i.on{background:var(--accent)}
-.hint{font-size:13px;color:var(--muted)}
+.hint{font-size:15px;color:var(--muted)}
 .empty{padding:24px;text-align:center;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){.roots button,.quals button,.seg button{transition:background .12s,color .12s}}
 </style>
@@ -334,22 +334,22 @@ function pianoVoicings(root,q){
     const frets=[6,5,4,3,2,1].filter(s=>shape[s]>0).map(s=>shape[s]);
     const lo=frets.length?Math.min(...frets):1, hi=frets.length?Math.max(...frets):1;
     let start=hi<=4?1:lo; if(hi-start>4)start=hi-4;
-    const nutY=34, fh=30, sx=s=>26+(6-s)*22, W=160, H=nutY+5*fh+30;
+    const nutY=34, fh=30, sx=s=>26+(6-s)*22, W=160, H=nutY+5*fh+32;
     let o=`<svg class="fb" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img">`;
     for(let f=0;f<=5;f++){const y=nutY+f*fh;o+=`<line x1="26" y1="${y}" x2="136" y2="${y}" stroke="var(--fret)" stroke-width="${f===0&&start===1?5:1.2}" stroke-linecap="round"/>`}
     for(let s=6;s>=1;s--)o+=`<line x1="${sx(s)}" y1="${nutY}" x2="${sx(s)}" y2="${nutY+5*fh}" stroke="var(--string)" stroke-width="${s>=5?2:1.2}"/>`;
-    if(start>1)o+=`<text x="12" y="${nutY+fh/2+4}" font-family="var(--mono)" font-size="12" fill="var(--muted)" text-anchor="middle">${start}</text>`;
+    if(start>1)o+=`<text x="12" y="${nutY+fh/2+4}" font-family="var(--mono)" font-size="14" fill="var(--muted)" text-anchor="middle">${start}</text>`;
     for(let s=6;s>=1;s--){
       const x=sx(s), f=shape[s];
-      if(f<0){o+=`<text x="${x}" y="22" font-size="15" fill="var(--muted)" text-anchor="middle">×</text>`;continue}
+      if(f<0){o+=`<text x="${x}" y="22" font-size="17" fill="var(--muted)" text-anchor="middle">×</text>`;continue}
       const iv=mod(OPEN[s]+f-rootPc), r=roleOf(iv), lab=IVNAME[iv]||IVNAME[iv+12]||'';
       if(f===0){
-        o+=`<circle cx="${x}" cy="18" r="8" fill="none" stroke="${col(r)}" stroke-width="2.2"/><text x="${x}" y="21.5" font-family="var(--mono)" font-size="8.5" fill="${col(r)}" text-anchor="middle" font-weight="700">${lab}</text>`;
+        o+=`<circle cx="${x}" cy="18" r="8" fill="none" stroke="${col(r)}" stroke-width="2.2"/><text x="${x}" y="21.5" font-family="var(--mono)" font-size="9.5" fill="${col(r)}" text-anchor="middle" font-weight="700">${lab}</text>`;
       }else{
         const cy=nutY+(f-start+0.5)*fh;
-        o+=`<circle cx="${x}" cy="${cy}" r="10" fill="${col(r)}"/><text x="${x}" y="${cy+3.5}" font-family="var(--mono)" font-size="9" fill="var(--dot-ink)" text-anchor="middle" font-weight="700">${lab}</text>`;
+        o+=`<circle cx="${x}" cy="${cy}" r="10.5" fill="${col(r)}"/><text x="${x}" y="${cy+3.5}" font-family="var(--mono)" font-size="10" fill="var(--dot-ink)" text-anchor="middle" font-weight="700">${lab}</text>`;
       }
-      o+=`<text x="${x}" y="${H-8}" font-family="var(--mono)" font-size="11" fill="var(--fg)" text-anchor="middle">${noteName(mod(OPEN[s]+f))}</text>`;
+      o+=`<text x="${x}" y="${H-8}" font-family="var(--mono)" font-size="13" fill="var(--fg)" text-anchor="middle">${noteName(mod(OPEN[s]+f))}</text>`;
     }
     return o+'</svg>';
   }
